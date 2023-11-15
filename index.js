@@ -106,7 +106,7 @@ function convertToSpeech() {
 
     const link = document.createElement('a');
     link.href = blobURL;
-    link.download = 'converted_audio.wav'; // Change the file format if needed (wav, mp3, etc.)
+    link.download = 'converted_audio.mp3'; // Change the file format if needed (wav, mp3, etc.)
     link.click();
   };
 }
