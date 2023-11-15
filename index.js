@@ -93,3 +93,20 @@ function changeVoiceSpeed(voiceSpeed) {
     speech.rate = 0.5;
   }
 }
+function convertToSpeech() {
+  const text = document.getElementById('textInput').value;
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  // Use the default speech synthesizer
+  window.speechSynthesis.speak(utterance);
+
+  utterance.onend = function() {
+    const blob = new Blob([new Uint8Array(0)]);
+    const blobURL = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = blobURL;
+    link.download = 'converted_audio.wav'; // Change the file format if needed (wav, mp3, etc.)
+    link.click();
+  };
+}
