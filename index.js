@@ -97,10 +97,17 @@ function convertToSpeech() {
   const text = document.getElementById('textInput').value;
   const utterance = new SpeechSynthesisUtterance(text);
 
-  // Use the default speech synthesizer
+  // Define a promise for speech synthesis
+  const speechPromise = new Promise((resolve, reject) => {
+    utterance.onend = () => resolve();
+    utterance.onerror = (event) => reject(event.error);
+  });
+
+  // Start speech synthesis
   window.speechSynthesis.speak(utterance);
 
-  utterance.onend = function() {
+  // After synthesis completes, create a download link
+  speechPromise.then(() => {
     const blob = new Blob([new Uint8Array(0)]);
     const blobURL = URL.createObjectURL(blob);
 
@@ -108,5 +115,7 @@ function convertToSpeech() {
     link.href = blobURL;
     link.download = 'converted_audio.mp3'; // Change the file format if needed (wav, mp3, etc.)
     link.click();
-  };
+  }).catch((error) => {
+    console.error('Speech synthesis error:', error);
+  });
 }
